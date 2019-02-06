@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+
+		<title>Flask App</title>
+		<style type="text/css">
+			* {
+				font-family: sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<p id="url_id"></p>
+		<form method="post" id="form">
+			<label for="num">Complaint folder number : </label>
+			<input type="text" id="num" name="CFnum" value="" autofocus autocomplete="off"><br>
+			<button>Submit</button>
+		</form>
+		<p>Paste the Complaint folder number in the text box and click submit</p>
+		<p id="CFnumber"></p>
+
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script>
+			$('#form').on('submit', function(e){
+				var number = $('#num').val();
+				e.preventDefault();
+				$.ajax({
+					url: 'http://127.0.0.1:5000/complaint/',
+					data: {'number': number},
+					method: 'POST',
+					success: function(data) {
+						$('#num').val('');
+						$('#CFnumber').html(data['newData'])
+						alert(data['newData']);
+					}
+				});
+			});
+
+			chrome.windows.getAll({populate:true},function(windows){
+  				windows.forEach(function(window){
+    					window.tabs.forEach(function(tab){
+      						//collect all of the urls here, I will just log them instead
+      						console.log(tab.url);
+    									});
+  								});
+							});
+
+		</script>
+
+	</body>
+</html>
